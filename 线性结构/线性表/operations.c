@@ -124,11 +124,67 @@ List Find(ElementType X,List PtrL){
 	}
 }
 
+/* ---------------------------------------------------------------------------------------------------------------------------------------------------------- */
 
+/* 3、插入（在第i-1（1<=i<=n+1）个结点后插入一个值为X的新结点） */
+/* 步骤：（1）先构造一个新结点，用s指向；
+         （2）在找到链表的第i-1个结点，用p指向；
+	     （3）然后修改指针，插入结点（p之后插入新结点时s） */
+List Insert(ElementType X,int i,List PtrL){
+	List p,s;
+	if(i == 1){                                    //新结点插入在表头
+		s = (List)malloc(sizeof(struct LNode));    //申请、填装结点
+		s->Data = X;                   
+		s->Next = PtrL;
+		return s;                                  //此时整个链表头指针也发生了变化，返回新表头指针
+	}
+	p = FindKth(i-1,PtrL);                         //查找第i-1个结点，用p指向； 
+	if(p == NULL){
+		printf("参数i错");                         //第i-1个不存在，不能插入
+		return NULL;
+	}
+	else{
+		s = (List)malloc(sizeof(struct LNode));    //申请、填装结点
+		s->Data = X;
+		s->Next = p->Next;                         //新结点插入在第i-1个结点的后面
+		p->Next = s;
+		return PtrL;
+}
 
+/* ---------------------------------------------------------------------------------------------------------------------------------------------------------- */
 
-
-
+/* 4、删除（删除链表的第i(1<=i<=n)个位置上的结点）*/
+/*步骤：（1）先找到链表的第i-1个结点，用p指向；
+	  （2）再用指针s指向要被删除的结点（p的下一个结点）；
+	  （3）然后修改指针，删除s所指结点；
+	  （4）最后释放s所指结点的空间； */
+List Delete(int i,List PtrL){
+	List p,s;
+	if(i == 1){                   //若要删除的是链表第一个结点
+		s = PtrL;                 //s指向第一个结点
+		if(PtrL!=NULL){           //PtrL头结点不空，则从链表中删除
+		PtrL = PtrL->Next;
+		}
+		else return NULL;         //PtrL头结点为空，则从链表中删除
+		free(s);                  //释放被删除结点
+		return PtrL;
+	}
+	p = FindKth(i-1,PtrL);
+	if(p == NULL){                        //若找不到第i-1个结点
+		printf("第%d个结点不存在",i-1);
+		return NULL;
+	}
+	else if(p->Next == NULL){             //若找不到第i个结点
+		printf("第%d个结点不存在",i);
+		return NULL;
+	}
+	else{
+		s = p->Next;                      //s指向第i个结点
+		p->Next = s->Next;                //从链表中删除
+		free(s);                          //释放被删除结点
+		return PtrL;
+	}
+}
 
 
 
