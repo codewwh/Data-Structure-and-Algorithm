@@ -86,12 +86,57 @@ void DPop(struct DStack* PtrS,int Tag){          //Tag作为区分两个堆栈�
 	}
 }
 
+/* -------------------------------------------------------------------------------------------------------------- */
 
+/* 堆栈的链式存储实现
+栈的链式存储结构实际上就是一个单链表，叫做链栈。插入和删除操作只能在链栈的栈顶进行。栈顶指针Top只能在链表的头部，不能再尾部 */
+/* 初始化 */
+typedef struct LSNode* LStack
+struct LSNode{
+	ElementType Data;
+	struct SLNode* Next;	
+};
 
+LStack CreateStack(){      //构建一个堆栈的头结点，返回指针。注：此头结点不代表任何一个元素，只是为了能够通过使用该头结点能够方便操作堆栈。
+	LStack S;
+	S = (LStack)malloc(sizeof(struct LSNode));
+	S->Next = NULL;
+	return S;
+}
 
+/* 判断堆栈为空 */
+int IsEmpty(Stack S){          //判断堆栈S是否为空，若为空函数返回整数1，否则返回0
+	return (S->Next == NULL);
+}
 
+/* -------------------------------------------------------------------------------------------------------------- */
 
+/* 1、入栈 */
+void Push(ElementType item,LStack S){
+	struct LSNode* TmpCell;
+	TmpCell = (struct LSNode*)malloc(sizeof(struct LSNode));
+	TmpCell->Data = item;
+	TmpCell->Next = S->Next;
+	S->Next = TmpCell;
+    return;
+}
 
+/* -------------------------------------------------------------------------------------------------------------- */
+
+ElementType Pop(LStack S){
+	struct SLNode* FirstCell;          //删除并返回堆栈S的栈顶元素
+	ElementType TopElem;
+	if(IsEmpty(s)){
+		printf("堆栈空");
+		return NULL;
+	}else{
+		FirstCell = S->Next;
+		S->Next = FirstCell->Next;
+		TopElem = FirstCell->Data;
+		free(FirstCell);
+		return TopElem;
+	}
+}
 
 
 
